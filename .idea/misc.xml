@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DesignSurface">
+    <option name="filePathToZoomLevelMap">
+      <map>
+        <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/drawable/ic_camera_cinza_24.xml" value="0.2015" />
+        <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/drawable/ic_editar_verde_24.xml" value="0.195" />
+        <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/drawable/ic_foto_cinza_24.xml" value="0.195" />
+        <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/drawable/ic_pesquisa_branco_24.xml" value="0.193" />
+        <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/layout/activity_cadastro.xml" value="0.67" />
+        <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/layout/activity_configuracoes.xml" value="0.33" />
+        <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/layout/activity_login.xml" value="0.1" />
+        <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/layout/activity_main.xml" value="0.3229166666666667" />
+        <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/layout/fragment_contatos.xml" value="0.3734375" />
+        <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/layout/fragment_conversas.xml" value="0.3569230769230769" />
+        <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/layout/toolbar.xml" value="0.31203703703703706" />
+        <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/menu/menu_main.xml" value="0.31384615384615383" />
+      </map>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="1.8 (2)" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
+</project>
