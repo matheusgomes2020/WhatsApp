@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
                 deslogarUsuario();
                 finish();
                 break;
-            case R.id.menu_configuracoes:
+            case R.id.menu_configuracoes :
                 abrirConfiguracoes();
                 break;
         }
