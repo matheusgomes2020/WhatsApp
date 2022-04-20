@@ -17,27 +17,43 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.matheus.whatsapp.R;
+import com.matheus.whatsapp.adapter.MensagensAdapter;
 import com.matheus.whatsapp.config.ConfiguracaoFirebase;
 import com.matheus.whatsapp.helper.Base64custom;
 import com.matheus.whatsapp.helper.UsuarioFirebase;
 import com.matheus.whatsapp.model.Mensagem;
 import com.matheus.whatsapp.model.Usuario;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class ChatActivity extends AppCompatActivity {
 
-    private TextView texViewNome;
+    private TextView textViewNome;
     private CircleImageView circleImageViewFoto;
     private EditText editMensagem;
-    private Usuario usuariodestinatario;
+    private Usuario usuarioDestinatario;
+    private DatabaseReference database;
+    private DatabaseReference mensagensRef;
+    private ChildEventListener childEventListenerMensagens;
 
-    //Identificador usuarios remetente e destinatário
+    //identificador usuarios remetente e destinatario
     private String idUsuarioRemetente;
     private String idUsuarioDestinatario;
+
+    private RecyclerView recyclerMensagens;
+    private MensagensAdapter adapter;
+    private List<Mensagem> mensagens = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,40 +63,54 @@ public class ChatActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setTitle("");
 
-        //Configurações iniciais
-        texViewNome = findViewById(R.id.textViewNomeChat);
+        //Configuracoes iniciais
+        textViewNome = findViewById(R.id.textViewNomeChat);
         circleImageViewFoto = findViewById(R.id.circleImageFotoChat);
         editMensagem = findViewById(R.id.editMensagem);
+        recyclerMensagens = findViewById(R.id.recyclerMensagem);
 
-        //Recuperar dados usuário remetente
+        //recupera dados do usuario remetente
         idUsuarioRemetente = UsuarioFirebase.getIdentificadorUsuario();
 
-        //Recuperar dados usuário destinatário
+        //Recuperar dados do usuário destinatario
         Bundle bundle = getIntent().getExtras();
-        if ( bundle != null ){
+        if ( bundle !=  null ){
 
-            usuariodestinatario = (Usuario) bundle.getSerializable( "chatContato" );
-            texViewNome.setText( usuariodestinatario.getNome() );
+            usuarioDestinatario = (Usuario) bundle.getSerializable("chatContato");
+            textViewNome.setText( usuarioDestinatario.getNome() );
 
-            String foto = usuariodestinatario.getFoto();
+            String foto = usuarioDestinatario.getFoto();
             if ( foto != null ){
-                Uri url = Uri.parse( usuariodestinatario.getFoto() );
-                Glide.with( ChatActivity.this )
-                        .load( url )
+                Uri url = Uri.parse(usuarioDestinatario.getFoto());
+                Glide.with(ChatActivity.this)
+                        .load(url)
                         .into( circleImageViewFoto );
             }else {
                 circleImageViewFoto.setImageResource(R.drawable.padrao);
             }
 
-            //Recuperar dados usuário destinatário
-            idUsuarioDestinatario = Base64custom.codificarBase64( usuariodestinatario.getEmail() );
-
+            //recuperar dados usuario destinatario
+            idUsuarioDestinatario = Base64custom.codificarBase64( usuarioDestinatario.getEmail() );
 
         }
 
+        //Configuração adapter
+        adapter = new MensagensAdapter(mensagens, getApplicationContext() );
+
+        //Configuração recyclerview
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
+        recyclerMensagens.setLayoutManager( layoutManager );
+        recyclerMensagens.setHasFixedSize( true );
+        recyclerMensagens.setAdapter( adapter );
+
+        database = ConfiguracaoFirebase.getFirebaseDatabase();
+        mensagensRef = database.child("mensagens")
+                .child( idUsuarioRemetente )
+                .child( idUsuarioDestinatario );
+
     }
 
-    public void enviarMensagem( View view ){
+    public void enviarMensagem(View view){
 
         String textoMensagem = editMensagem.getText().toString();
 
@@ -90,30 +120,77 @@ public class ChatActivity extends AppCompatActivity {
             mensagem.setIdUsuario( idUsuarioRemetente );
             mensagem.setMensagem( textoMensagem );
 
-            //Salvar imagem para o remetente
-            salvarMensagem( idUsuarioRemetente, idUsuarioDestinatario, mensagem );
+            //Salvar mensagem para o remetente
+            salvarMensagem(idUsuarioRemetente, idUsuarioDestinatario, mensagem);
 
+            //Salvar mensagem para o destinatario
+            salvarMensagem(idUsuarioDestinatario, idUsuarioRemetente, mensagem);
 
         }else {
             Toast.makeText(ChatActivity.this,
                     "Digite uma mensagem para enviar!",
-                    Toast.LENGTH_SHORT).show();
+                    Toast.LENGTH_LONG).show();
         }
 
     }
 
-    public void salvarMensagem( String idRemetente, String idDestinatario, Mensagem msg ){
+    private void salvarMensagem(String idRemetente, String idDestinatario, Mensagem msg){
 
         DatabaseReference database = ConfiguracaoFirebase.getFirebaseDatabase();
         DatabaseReference mensagemRef = database.child("mensagens");
 
-        mensagemRef.child( idRemetente )
-                .child( idDestinatario )
+        mensagemRef.child(idRemetente)
+                .child(idDestinatario)
                 .push()
-                .setValue( msg );
+                .setValue(msg);
 
         //Limpar texto
         editMensagem.setText("");
+
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        recuperarMensagens();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        mensagensRef.removeEventListener( childEventListenerMensagens );
+    }
+
+    private void recuperarMensagens(){
+
+        childEventListenerMensagens = mensagensRef.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                Mensagem mensagem = dataSnapshot.getValue( Mensagem.class );
+                mensagens.add( mensagem );
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
 
     }
 
