@@ -10,7 +10,6 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,10 +23,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,6 +37,7 @@ import com.matheus.whatsapp.adapter.MensagensAdapter;
 import com.matheus.whatsapp.config.ConfiguracaoFirebase;
 import com.matheus.whatsapp.helper.Base64custom;
 import com.matheus.whatsapp.helper.UsuarioFirebase;
+import com.matheus.whatsapp.model.Conversa;
 import com.matheus.whatsapp.model.Mensagem;
 import com.matheus.whatsapp.model.Usuario;
 
@@ -71,6 +67,7 @@ public class ChatActivity extends AppCompatActivity {
     private RecyclerView recyclerMensagens;
     private MensagensAdapter adapter;
     private List<Mensagem> mensagens = new ArrayList<>();
+
     private static final int SELECAO_CAMERA  = 100;
 
     @Override
@@ -204,6 +201,8 @@ public class ChatActivity extends AppCompatActivity {
                                     //Salvar mensagem remetente
                                     salvarMensagem( idUsuarioDestinatario, idUsuarioRemetente, mensagem );
 
+
+
                                     Toast.makeText(ChatActivity.this,
                                             "Sucesso ao enviar imagem",
                                             Toast.LENGTH_SHORT).show();
@@ -238,11 +237,27 @@ public class ChatActivity extends AppCompatActivity {
             //Salvar mensagem para o destinatario
             salvarMensagem(idUsuarioDestinatario, idUsuarioRemetente, mensagem);
 
+            //Salvar conversa
+            salvarConversa(mensagem);
+
         }else {
             Toast.makeText(ChatActivity.this,
                     "Digite uma mensagem para enviar!",
                     Toast.LENGTH_LONG).show();
         }
+
+    }
+
+    private void salvarConversa( Mensagem msg ){
+
+        //Salvar conversa remetente
+        Conversa conversaRemetente = new Conversa();
+        conversaRemetente.setIdRemetente( idUsuarioRemetente );
+        conversaRemetente.setIdDestinatario( idUsuarioDestinatario );
+        conversaRemetente.setUltimaMensagem( msg.getMensagem() );
+        conversaRemetente.setUsuarioExibicao( usuarioDestinatario );
+
+        conversaRemetente.salvar();
 
     }
 
