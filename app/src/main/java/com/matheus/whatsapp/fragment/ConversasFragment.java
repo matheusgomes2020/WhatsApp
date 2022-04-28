@@ -9,10 +9,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
@@ -108,6 +110,35 @@ public class ConversasFragment extends Fragment {
     public void onStop() {
         super.onStop();
         conversasRef.removeEventListener( childEventListenerConversas );
+    }
+
+    public void pesquisarConversas( String texto ){
+       // Log.d( "pesquisa",texto );
+
+        List<Conversa> listaConversasBusca = new ArrayList<>();
+
+        for ( Conversa conversa : listaConversas ){
+
+            String nome = conversa.getUsuarioExibicao().getNome().toLowerCase();
+            String ultimaMsg = conversa.getUltimaMensagem().toLowerCase();
+
+            if ( nome.contains( texto ) || ultimaMsg.contains( texto ) ){
+                listaConversasBusca.add( conversa );
+            }
+        }
+
+        adapter = new ConversasAdapter( listaConversasBusca, getActivity() );
+        recyclerViewConversas.setAdapter( adapter );
+        adapter.notifyDataSetChanged();
+
+    }
+
+    public void recarregarConversas(){
+
+        adapter = new ConversasAdapter( listaConversas, getActivity() );
+        recyclerViewConversas.setAdapter( adapter );
+        adapter.notifyDataSetChanged();
+
     }
 
     public void recuperarConversas(){
