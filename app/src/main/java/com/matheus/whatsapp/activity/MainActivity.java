@@ -39,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         setSupportActionBar( toolbar );
 
         //Configurar abas
-        FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
+        final FragmentPagerItemAdapter adapter = new FragmentPagerItemAdapter(
                 getSupportFragmentManager(),
                 FragmentPagerItems.with(this)
                         .add("Conversas", ConversasFragment.class)
@@ -52,8 +52,9 @@ public class MainActivity extends AppCompatActivity {
         SmartTabLayout viewPagerTab = findViewById(R.id.viewPagerTab);
         viewPagerTab.setViewPager( viewPager );
 
+
         //Configuração do search view
-        searchView = findViewById( R.id.material_search_principal );
+        searchView = findViewById(R.id.material_search_principal);
         //Listener para o search view
         searchView.setOnSearchViewListener(new MaterialSearchView.SearchViewListener() {
             @Override
@@ -64,28 +65,29 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onSearchViewClosed() {
 
-                ConversasFragment fragment = ( ConversasFragment ) adapter.getPage( 0 );
+                ConversasFragment fragment = (ConversasFragment) adapter.getPage(0);
                 fragment.recarregarConversas();
 
             }
         });
 
-        //Listener para a caixa de texto
+        //Listener para caixa de texto
         searchView.setOnQueryTextListener(new MaterialSearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                //Log.d( "evento", "onQueryTextSubmit" );
+                //Log.d("evento", "onQueryTextSubmit");
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                //Log.d( "evento", "onQueryTextChange" );
+                //Log.d("evento", "onQueryTextChange");
 
-                ConversasFragment fragment = ( ConversasFragment ) adapter.getPage( 0 );
-                if ( newText != null && !newText.isEmpty() ){
+                ConversasFragment fragment = (ConversasFragment) adapter.getPage(0);
+                if( newText != null && !newText.isEmpty() ){
                     fragment.pesquisarConversas( newText.toLowerCase() );
                 }
+
                 return true;
             }
         });
@@ -99,8 +101,8 @@ public class MainActivity extends AppCompatActivity {
         inflater.inflate(R.menu.menu_main, menu);
 
         //Configurar botao de pesquisa
-        MenuItem item = menu.findItem( R.id.menuPesquisa );
-        searchView.setMenuItem( item );
+        MenuItem item = menu.findItem(R.id.menuPesquisa);
+        searchView.setMenuItem(item);
 
         return super.onCreateOptionsMenu(menu);
     }
@@ -109,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
 
         switch ( item.getItemId() ){
-            case R.id.menu_sair:
+            case R.id.menu_sair :
                 deslogarUsuario();
                 finish();
                 break;

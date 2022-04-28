@@ -63,33 +63,35 @@ public class ConversasFragment extends Fragment {
         recyclerViewConversas.setAdapter( adapter );
 
         //Configurar evento de clique
-        recyclerViewConversas.addOnItemTouchListener( new RecyclerItemClickListener(
-                getActivity(),
-                recyclerViewConversas,
-                new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
+        recyclerViewConversas.addOnItemTouchListener(
+                new RecyclerItemClickListener(
+                        getActivity(),
+                        recyclerViewConversas,
+                        new RecyclerItemClickListener.OnItemClickListener() {
+                            @Override
+                            public void onItemClick(View view, int position) {
 
+                                Conversa conversaSelecionada = listaConversas.get( position );
 
-                        Conversa conversaSelecionada = listaConversas.get( position );
+                                Intent i = new Intent(getActivity(), ChatActivity.class);
+                                i.putExtra("chatContato", conversaSelecionada.getUsuarioExibicao() );
+                                startActivity( i );
 
-                        Intent i = new Intent(getActivity(), ChatActivity.class);
-                        i.putExtra("chatContato", conversaSelecionada.getUsuarioExibicao() );
-                        startActivity( i );
+                            }
 
-                    }
+                            @Override
+                            public void onLongItemClick(View view, int position) {
 
-                    @Override
-                    public void onLongItemClick(View view, int position) {
+                            }
 
-                    }
+                            @Override
+                            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                            }
+                        }
+                )
+        );
 
-                    }
-                }
-        ) );
 
         //Configura conversas ref
         String identificadorUsuario = UsuarioFirebase.getIdentificadorUsuario();
@@ -112,8 +114,8 @@ public class ConversasFragment extends Fragment {
         conversasRef.removeEventListener( childEventListenerConversas );
     }
 
-    public void pesquisarConversas( String texto ){
-       // Log.d( "pesquisa",texto );
+    public void pesquisarConversas(String texto){
+        //Log.d("pesquisa",  texto );
 
         List<Conversa> listaConversasBusca = new ArrayList<>();
 
@@ -122,29 +124,24 @@ public class ConversasFragment extends Fragment {
             String nome = conversa.getUsuarioExibicao().getNome().toLowerCase();
             String ultimaMsg = conversa.getUltimaMensagem().toLowerCase();
 
-            if ( nome.contains( texto ) || ultimaMsg.contains( texto ) ){
+            if( nome.contains( texto ) || ultimaMsg.contains( texto ) ){
                 listaConversasBusca.add( conversa );
             }
         }
 
-        adapter = new ConversasAdapter( listaConversasBusca, getActivity() );
-        recyclerViewConversas.setAdapter( adapter );
+        adapter = new ConversasAdapter(listaConversasBusca, getActivity());
+        recyclerViewConversas.setAdapter(adapter);
         adapter.notifyDataSetChanged();
 
     }
 
     public void recarregarConversas(){
-
-        adapter = new ConversasAdapter( listaConversas, getActivity() );
-        recyclerViewConversas.setAdapter( adapter );
+        adapter = new ConversasAdapter(listaConversas, getActivity());
+        recyclerViewConversas.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-
     }
 
     public void recuperarConversas(){
-
-        // Limpa a lista de contatos
-        listaConversas.clear();
 
         childEventListenerConversas = conversasRef.addChildEventListener(new ChildEventListener() {
             @Override

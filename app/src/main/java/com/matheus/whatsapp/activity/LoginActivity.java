@@ -11,6 +11,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
@@ -22,7 +23,7 @@ import com.matheus.whatsapp.model.Usuario;
 
 public class LoginActivity extends AppCompatActivity {
 
-    private EditText campoEmail, campoSenha;
+    private TextInputEditText campoEmail, campoSenha;
     private FirebaseAuth autenticacao;
 
     @Override
@@ -97,6 +98,7 @@ public class LoginActivity extends AppCompatActivity {
                     "Preencha o email!",
                     Toast.LENGTH_SHORT).show();
         }
+
 
     }
 

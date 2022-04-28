@@ -3,7 +3,6 @@ package com.matheus.whatsapp.fragment;
 import android.content.Intent;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,6 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.ValueEventListener;
 import com.matheus.whatsapp.R;
 import com.matheus.whatsapp.activity.ChatActivity;
+import com.matheus.whatsapp.activity.GrupoActivity;
 import com.matheus.whatsapp.adapter.ContatosAdapter;
 import com.matheus.whatsapp.config.ConfiguracaoFirebase;
 import com.matheus.whatsapp.helper.RecyclerItemClickListener;
@@ -73,9 +73,20 @@ public class ContatosFragment extends Fragment {
                             public void onItemClick(View view, int position) {
 
                                 Usuario usuarioSelecionado = listaContatos.get( position );
-                                Intent i = new Intent(getActivity(), ChatActivity.class);
-                                i.putExtra("chatContato", usuarioSelecionado );
-                                startActivity( i );
+                                boolean cabecalho = usuarioSelecionado.getEmail().isEmpty();
+
+                                if( cabecalho ){
+
+                                    Intent i = new Intent(getActivity(), GrupoActivity.class);
+                                    startActivity( i );
+
+                                }else {
+                                    Intent i = new Intent(getActivity(), ChatActivity.class);
+                                    i.putExtra("chatContato", usuarioSelecionado );
+                                    startActivity( i );
+                                }
+
+
 
                             }
 
@@ -91,6 +102,16 @@ public class ContatosFragment extends Fragment {
                         }
                 )
         );
+
+        /*Define usuário com e-mail vazio
+         * em caso de e-mail vazio o usuário será utilizado como
+         * cabecalho, exibindo novo grupo */
+        Usuario itemGrupo = new Usuario();
+        itemGrupo.setNome("Novo grupo");
+        itemGrupo.setEmail("");
+
+        listaContatos.add( itemGrupo );
+
 
         return view;
     }
@@ -108,9 +129,6 @@ public class ContatosFragment extends Fragment {
     }
 
     public void recuperarContatos(){
-
-        // Limpa a lista de contatos
-        listaContatos.clear();
 
         valueEventListenerContatos = usuariosRef.addValueEventListener(new ValueEventListener() {
             @Override
