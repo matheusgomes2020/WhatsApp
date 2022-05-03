@@ -6,11 +6,14 @@
         <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/drawable/bg_balao.xml" value="0.1465" />
         <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/drawable/fundo_mensagem_chat.xml" value="0.205" />
         <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/drawable/ic_camera_cinza_24.xml" value="0.2015" />
+        <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/drawable/ic_confirmar_branco_24.xml" value="0.2345" />
         <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/drawable/ic_editar_verde_24.xml" value="0.195" />
         <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/drawable/ic_enviar_branco_24dp.xml" value="0.1" />
         <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/drawable/ic_foto_cinza_24.xml" value="0.195" />
         <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/drawable/ic_pesquisa_branco_24.xml" value="0.193" />
+        <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/drawable/ic_seta_proximo_branca_24.xml" value="0.1755" />
         <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/layout/activity_cadastro.xml" value="0.67" />
+        <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/layout/activity_cadastro_grupo.xml" value="0.3388888888888889" />
         <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/layout/activity_chat.xml" value="0.3569230769230769" />
         <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/layout/activity_configuracoes.xml" value="0.33" />
         <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/layout/activity_grupo.xml" value="0.3388888888888889" />
@@ -21,6 +24,7 @@
         <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/layout/adapter_grupo_selecionado.xml" value="0.3388888888888889" />
         <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/layout/adapter_mensage_remetente.xml" value="0.5" />
         <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/layout/adapter_mensagem_destinatario.xml" value="0.22962962962962963" />
+        <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/layout/content_cadastro_grupo.xml" value="0.3388888888888889" />
         <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/layout/content_chat.xml" value="0.33" />
         <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/layout/content_grupo.xml" value="0.33" />
         <entry key="..\:/Users/batat/AndroidStudioProjects/WhatsApp/app/src/main/res/layout/content_main.xml" value="0.3388888888888889" />
