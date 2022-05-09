@@ -34,20 +34,20 @@ public class ConversasAdapter extends RecyclerView.Adapter<ConversasAdapter.MyVi
 
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View itemLista = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_contatos, parent, false );
+        View itemLista = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_contatos, parent, false);
         return new MyViewHolder(itemLista);
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        Conversa conversa = conversas.get( position );
-        holder.ultimaMensagem.setText( conversa.getUltimaMensagem() );
+        Conversa conversa = conversas.get(position);
+        holder.ultimaMensagem.setText(conversa.getUltimaMensagem());
 
-        if ( conversa.getIsGroup().equals("true")){
+        if (conversa.getIsGroup().equals("true")) {
 
             Grupo grupo = conversa.getGrupo();
-            holder.nome.setText( grupo.getNome() );
+            holder.nome.setText(grupo.getNome());
 
             if (grupo.getFoto() != null) {
                 Uri uri = Uri.parse(grupo.getFoto());
@@ -56,17 +56,20 @@ public class ConversasAdapter extends RecyclerView.Adapter<ConversasAdapter.MyVi
                 holder.foto.setImageResource(R.drawable.padrao);
             }
 
-        }else {
+        } else {
             Usuario usuario = conversa.getUsuarioExibicao();
-            holder.nome.setText(usuario.getNome());
+            if (usuario != null) {
 
-            if (usuario.getFoto() != null) {
-                Uri uri = Uri.parse(usuario.getFoto());
-                Glide.with(context).load(uri).into(holder.foto);
-            } else {
-                holder.foto.setImageResource(R.drawable.padrao);
+                holder.nome.setText(usuario.getNome());
+
+                if (usuario.getFoto() != null) {
+                    Uri uri = Uri.parse(usuario.getFoto());
+                    Glide.with(context).load(uri).into(holder.foto);
+                } else {
+                    holder.foto.setImageResource(R.drawable.padrao);
+                }
+
             }
-
         }
     }
 
