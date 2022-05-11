@@ -21,12 +21,15 @@ import com.matheus.whatsapp.R;
 import com.matheus.whatsapp.activity.ChatActivity;
 import com.matheus.whatsapp.activity.GrupoActivity;
 import com.matheus.whatsapp.adapter.ContatosAdapter;
+import com.matheus.whatsapp.adapter.ConversasAdapter;
 import com.matheus.whatsapp.config.ConfiguracaoFirebase;
 import com.matheus.whatsapp.helper.RecyclerItemClickListener;
 import com.matheus.whatsapp.helper.UsuarioFirebase;
+import com.matheus.whatsapp.model.Conversa;
 import com.matheus.whatsapp.model.Usuario;
 
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class ContatosFragment extends Fragment {
@@ -72,7 +75,9 @@ public class ContatosFragment extends Fragment {
                             @Override
                             public void onItemClick(View view, int position) {
 
-                                Usuario usuarioSelecionado = listaContatos.get( position );
+                                List<Usuario> listaUsuariosAtualizada = adapter.getcontatos();
+
+                                Usuario usuarioSelecionado = listaUsuariosAtualizada.get( position );
                                 boolean cabecalho = usuarioSelecionado.getEmail().isEmpty();
 
                                 if( cabecalho ){
@@ -156,6 +161,31 @@ public class ContatosFragment extends Fragment {
             }
         });
 
+    }
+
+    public void pesquisarContatos(String texto){
+        //Log.d("pesquisa",  texto );
+
+        List<Usuario> listaContatosBusca = new ArrayList<>();
+
+        for ( Usuario usuario : listaContatos ){
+
+            String nome = usuario.getNome().toLowerCase();
+
+
+
+        }
+
+        adapter = new ContatosAdapter(listaContatosBusca, getActivity());
+        recyclerViewListaContatos.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+
+    }
+
+    public void recarregarContatos(){
+        adapter = new ContatosAdapter(listaContatos, getActivity());
+        recyclerViewListaContatos.setAdapter(adapter);
+        adapter.notifyDataSetChanged();
     }
 
 }

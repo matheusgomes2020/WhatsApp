@@ -32,6 +32,10 @@ public class ConversasAdapter extends RecyclerView.Adapter<ConversasAdapter.MyVi
         this.context = c;
     }
 
+    public List<Conversa> getConversas(){
+        return this.conversas;
+    }
+
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View itemLista = LayoutInflater.from(parent.getContext()).inflate(R.layout.adapter_contatos, parent, false);
