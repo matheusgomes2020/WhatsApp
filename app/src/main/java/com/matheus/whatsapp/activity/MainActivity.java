@@ -83,8 +83,8 @@ public class MainActivity extends AppCompatActivity {
             public boolean onQueryTextChange(String newText) {
                 //Log.d("evento", "onQueryTextChange");
 
-                //Verifica se esta pesquisando Conversas ou Contatos
-                //a partir da tab que esta ativa
+                // Verifica se esta pesquisando Conversas ou Contatos
+                // a partir da tab que esta ativa
                 switch ( viewPager.getCurrentItem() ){
                     case 0:
                         ConversasFragment conversasFragment = (ConversasFragment) adapter.getPage(0);
@@ -94,8 +94,8 @@ public class MainActivity extends AppCompatActivity {
                             conversasFragment.recarregarConversas();
                         }
                         break;
-                    case 1:
-                        ContatosFragment contatosFragment = ( ContatosFragment ) adapter.getPage( 1 );
+                    case 1 :
+                        ContatosFragment contatosFragment = (ContatosFragment) adapter.getPage(1);
                         if( newText != null && !newText.isEmpty() ){
                             contatosFragment.pesquisarContatos( newText.toLowerCase() );
                         }else {

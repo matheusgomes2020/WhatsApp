@@ -75,7 +75,7 @@ public class ContatosFragment extends Fragment {
                             @Override
                             public void onItemClick(View view, int position) {
 
-                                List<Usuario> listaUsuariosAtualizada = adapter.getcontatos();
+                                List<Usuario> listaUsuariosAtualizada  = adapter.getcontatos();
 
                                 Usuario usuarioSelecionado = listaUsuariosAtualizada.get( position );
                                 boolean cabecalho = usuarioSelecionado.getEmail().isEmpty();
@@ -108,15 +108,7 @@ public class ContatosFragment extends Fragment {
                 )
         );
 
-        /*Define usuário com e-mail vazio
-         * em caso de e-mail vazio o usuário será utilizado como
-         * cabecalho, exibindo novo grupo */
-        Usuario itemGrupo = new Usuario();
-        itemGrupo.setNome("Novo grupo");
-        itemGrupo.setEmail("");
-
-        listaContatos.add( itemGrupo );
-
+        adionarMenuNovoGrupo();
 
         return view;
     }
@@ -138,6 +130,8 @@ public class ContatosFragment extends Fragment {
         valueEventListenerContatos = usuariosRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
+
+                limparListaContatos();
 
                 for ( DataSnapshot dados: dataSnapshot.getChildren() ){
 
@@ -163,16 +157,37 @@ public class ContatosFragment extends Fragment {
 
     }
 
+    public void limparListaContatos(){
+
+        listaContatos.clear();
+        adionarMenuNovoGrupo();
+
+    }
+
+    public void adionarMenuNovoGrupo(){
+
+        /*Define usuário com e-mail vazio
+         * em caso de e-mail vazio o usuário será utilizado como
+         * cabecalho, exibindo novo grupo */
+        Usuario itemGrupo = new Usuario();
+        itemGrupo.setNome("Novo grupo");
+        itemGrupo.setEmail("");
+
+        listaContatos.add( itemGrupo );
+
+    }
+
     public void pesquisarContatos(String texto){
         //Log.d("pesquisa",  texto );
 
         List<Usuario> listaContatosBusca = new ArrayList<>();
 
-        for ( Usuario usuario : listaContatos ){
+        for ( Usuario usuario : listaContatos ) {
 
             String nome = usuario.getNome().toLowerCase();
-
-
+            if(nome.contains( texto )) {
+                listaContatosBusca.add(usuario);
+            }
 
         }
 

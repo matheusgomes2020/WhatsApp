@@ -215,17 +215,38 @@ public class ChatActivity extends AppCompatActivity {
                                     Uri url = task.getResult();
                                     String downloadUrl = url.toString();
 
-                                    Mensagem mensagem = new Mensagem();
-                                    mensagem.setIdUsuario(idUsuarioRemetente);
-                                    mensagem.setMensagem("imagem.jpeg");
-                                    mensagem.setImagem(downloadUrl);
 
-                                    //Salvar mensagem remetente
-                                    salvarMensagem(idUsuarioRemetente, idUsuarioDestinatario, mensagem);
 
-                                    //Salvar mensagem remetente
-                                    salvarMensagem(idUsuarioDestinatario, idUsuarioRemetente, mensagem);
+                                    if (usuarioDestinatario != null) {
+                                        Mensagem mensagem = new Mensagem();
+                                        mensagem.setIdUsuario(idUsuarioRemetente);
+                                        mensagem.setMensagem("imagem.jpeg");
+                                        mensagem.setImagem(downloadUrl);
 
+                                        //Salvar mensagem remetente
+                                        salvarMensagem(idUsuarioRemetente, idUsuarioDestinatario, mensagem);
+
+                                        //Salvar mensagem remetente
+                                        salvarMensagem(idUsuarioDestinatario, idUsuarioRemetente, mensagem);
+                                    }else {//Mensagem em grupo
+                                        for (Usuario membro : grupo.getMembros()) {
+
+                                            String idRemetenteGrupo = Base64custom.codificarBase64(membro.getEmail());
+                                            String idUsuarioLogadoGrupo = UsuarioFirebase.getIdentificadorUsuario();
+
+                                            Mensagem mensagem = new Mensagem();
+                                            mensagem.setIdUsuario(idUsuarioLogadoGrupo);
+                                            mensagem.setMensagem("imagem.jpeg");
+                                            mensagem.setNome( usuarioRemetente.getNome() );
+                                            mensagem.setImagem( downloadUrl );
+
+                                            //Salvar mensagem para o membro
+                                            salvarMensagem(idRemetenteGrupo, idUsuarioDestinatario, mensagem);
+
+                                            //Salvar conversa
+                                            salvarConversa(idRemetenteGrupo, idUsuarioDestinatario, usuarioDestinatario, mensagem, true);
+                                        }
+                                    }
 
                                     Toast.makeText(ChatActivity.this,
                                             "Sucesso ao enviar imagem",
@@ -279,7 +300,6 @@ public class ChatActivity extends AppCompatActivity {
                     Mensagem mensagem = new Mensagem();
                     mensagem.setIdUsuario(idUsuarioLogadoGrupo);
                     mensagem.setMensagem(textoMensagem);
-
                     mensagem.setNome( usuarioRemetente.getNome() );
 
                     //Salvar mensagem para o membro
@@ -287,10 +307,6 @@ public class ChatActivity extends AppCompatActivity {
 
                     //Salvar conversa
                     salvarConversa(idRemetenteGrupo, idUsuarioDestinatario, usuarioDestinatario, mensagem, true);
-
-                    //Salvar mensagem para o grupo
-
-
                 }
 
             }
@@ -352,6 +368,8 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void recuperarMensagens() {
+
+        mensagens.clear();
 
         childEventListenerMensagens = mensagensRef.addChildEventListener(new ChildEventListener() {
             @Override
